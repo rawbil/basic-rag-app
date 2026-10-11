@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="submit-form" action="" method="POST">
+      <label for="input">Question: </label>
+      <input type="text" placeholder="ask question" name="input" id="input" />
+      <button id="submit-btn">Submit</button>
+    </form>
+    <section>
+      <p id="answer">...</p>
+    </section>
+  </body>
+  <script>
+    const form = document.querySelector("#submit-form");
+    const input = document.querySelector("#input");
+    const submit_btn = document.querySelector("#submit-btn");
+    const answer = document.querySelector("#answer");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      submit_btn.disabled = true;
+      answer.textContent = "...";
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch("/chat", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || "Request failed");
+        }
+
+        if (!response.body) {
+          throw new Error("Streaming is not supported by this browser");
+        }
+
+        answer.textContent = "";
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { value, done } = await reader.read();
+
+          if (done) {
+            answer.textContent += decoder.decode();
+            break;
+          }
+
+          const chunk = decoder.decode(value, { stream: true });
+          answer.textContent += chunk;
+        }
+      } catch (error) {
+        answer.textContent =
+          error instanceof Error
+            ? error.message
+            : "Something went wrong. Please try again.";
+      } finally {
+        submit_btn.disabled = false;
+        input.value = "";
+      }
+    });
+  </script>
+</html>
