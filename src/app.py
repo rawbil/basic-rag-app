@@ -4,9 +4,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
-from helper import ingest_documents, GetRAGResponse
 import json
 import uvicorn
+
+if __package__:
+    from .helper import ingest_documents, GetRAGResponse
+else:
+    from helper import ingest_documents, GetRAGResponse
 
 app = FastAPI()
 
