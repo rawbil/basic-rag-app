@@ -1,11 +1,14 @@
 name: Rag1
 on: push
 jobs:
-    first_job:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Welcome Message
-              run: echo "Hey World, Welcome"
+  first_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Welcome Message
+        run: echo "Hey World, Welcome"
 
-            - name: List Directories
-              run: ls
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: List Directories
+        run: ls
