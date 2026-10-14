@@ -1,7 +1,7 @@
 name: Rag1
 on: push
 jobs:
-  first_job:
+  build_job:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,11 +19,24 @@ jobs:
       - name: Generate ASCII Artwork
         run: cowsay -f dragon "Rawr! Run, I am a dragon!" >> dragon.txt
 
-      - name: Test Dragon File Exists
-        run: grep -i "dragon" dragon.txt
+      - name: Sleep for 30 seconds
+        run: sleep 30
 
-      - name: Read File
-        run: cat dragon.txt
+  test_job:
+    needs: build_job
+    runs-on: ubuntu-latest
+    steps:
 
-      # - name: List Directories
-      #   run: ls
+        - name: Sleep for 10 seconds
+          run: sleep 10
+
+        - name: Test Dragon File Exists
+          run: grep -i "dragon" dragon.txt
+
+  deploy_job:
+    needs: [test_job]
+    runs-on: ubuntu-latest
+    steps:
+       - name: Read File
+         run: cat dragon.txt
+
