@@ -11,10 +11,19 @@ jobs:
       - name: Welcome Message and List Directories
         run: |
           echo "Hey World, Welcome"
-          ls -ltr
+          ls -ltra
+
+      - name: Install Cowsay
+        run: sudo apt install cowsay -y
 
       - name: Generate ASCII Artwork
-        run: cowsay -f dragon "Rawr!"
+        run: cowsay -f dragon "Rawr! Run, I am a dragon!" >> dragon.txt
+
+      - name: Test Dragon File Exists
+        run: grep -i "dragon" dragon.txt
+
+      - name: Read File
+        run: cat dragon.txt
 
       # - name: List Directories
       #   run: ls
