@@ -4,13 +4,17 @@ jobs:
   first_job:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+
       - name: Welcome Message and List Directories
         run: |
           echo "Hey World, Welcome"
           ls -ltr
 
-      - name: Checkout
-        uses: actions/checkout@v7
+      - name: Generate ASCII Artwork
+        run: cowsay -f dragon "Rawr!"
 
       # - name: List Directories
       #   run: ls
