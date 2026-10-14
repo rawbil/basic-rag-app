@@ -9,4 +9,4 @@ jobs:
 
 
       - name: Execute Script
-        run: ./ascii-script.sh
+        run: sudo ./ascii-script.sh
