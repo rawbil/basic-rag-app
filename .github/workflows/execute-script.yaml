@@ -1,0 +1,12 @@
+name: Execute Shell
+on: push
+jobs:
+  first_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+
+      - name: Execute Script
+        run: ./ascii-script.sh
