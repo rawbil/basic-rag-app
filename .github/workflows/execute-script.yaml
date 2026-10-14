@@ -9,4 +9,7 @@ jobs:
 
 
       - name: Execute Script
-        run: sudo ./ascii-script.sh
+      # add execute permission first before running the script, otherwise it won't work
+        run: |
+            chmod +x ascii-script.sh
+            ./ascii-script.sh
