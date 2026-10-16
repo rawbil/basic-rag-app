@@ -23,7 +23,7 @@ jobs:
           #name: default is 'artifact'
           name: dragon-text-file
           path: dragon.txt
-          archive: false
+          # archive: false
 
   test_job:
     needs: build_job
