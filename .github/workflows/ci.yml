@@ -7,11 +7,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-
-      - name: Welcome Message and List Directories
+      - name: Welcome Message
         run: |
           echo "Hey World, Welcome"
-          ls -ltra
 
       - name: Install Cowsay
         run: sudo apt install cowsay -y
@@ -19,24 +17,34 @@ jobs:
       - name: Generate ASCII Artwork
         run: cowsay -f dragon "Rawr! Run, I am a dragon!" >> dragon.txt
 
-      - name: Sleep for 30 seconds
-        run: sleep 30
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          #name: default is 'artifact'
+          name: dragon-text-file
+          path: dragon.txt
+          archive: false
 
   test_job:
     needs: build_job
     runs-on: ubuntu-latest
     steps:
+      - name: Download Dragon File
+        uses: actions/download-artifact@v8
+        with:
+          name: dragon-text-file
 
-        - name: Sleep for 10 seconds
-          run: sleep 10
-
-        - name: Test Dragon File Exists
-          run: grep -i "dragon" dragon.txt
+      - name: Test Dragon File Exists
+        run: grep -i "dragon" dragon.txt
 
   deploy_job:
     needs: [test_job]
     runs-on: ubuntu-latest
     steps:
-       - name: Read File
-         run: cat dragon.txt
+      - name: Download Dragon File
+        uses: actions/download-artifact@v8
+        with:
+          name: dragon-text-file
 
+      - name: Read File
+        run: cat dragon.txt
